@@ -28,25 +28,28 @@ def find_year_in_path(path: Path) -> str | None:
     return None
 
 
+def find_year_in_exif(file_path: Path) -> str | None:
+    if not file_path.is_file():
+        return None
+
+    exif_dict = piexif.load(f"{file_path}")
+    if len(exif_dict["Exif"]) <= 1:
+        return None
+
+    for tag in exif_dict["Exif"]:
+        # Loop all tags in the Exif-data to find the one named DateTimeOriginal
+        if piexif.TAGS["Exif"][tag]["name"] == "DateTimeOriginal":
+            # print(f"Found tag: {piexif.TAGS['Exif'][tag]['name']} with value: {exif_dict['Exif'][tag]}")
+            # Found a date! Exif tag contains byte-coded strings, decode first and grab the first four digits
+            return exif_dict["Exif"][tag].decode()[:4]
+
+
 if __name__ == '__main__':
     for file in files:
         print("---------------------------------------------------------------------------------")
         print(f"Examining file: {file}")
         if year_from_path := find_year_in_path(file):
-            print(f"Found year: {year_from_path}")
-        exif_dict = piexif.load(f"{file}")
-        if len(exif_dict["Exif"]) <= 1:
-            print("No exif data found")
-            continue
-        year_from_exif = None
-        for tag in exif_dict["Exif"]:
-            # Loop all tags in the Exif-data to find the one named DateTimeOriginal
-            if piexif.TAGS["Exif"][tag]["name"] == "DateTimeOriginal":
-                # print(f"Found tag: {piexif.TAGS['Exif'][tag]['name']} with value: {exif_dict['Exif'][tag]}")
-                # Exif tag contains byte-coded strings, decode first and grab the first four digits
-                year_from_exif = exif_dict["Exif"][tag].decode()[:4]
+            print(f"Found year in path: {year_from_path}")
 
-        if year_from_exif:
-            print(f"Found year in Exif: {year_from_exif}")
-        else:
-            print(f"No year found in exif data")
+        if year_from_exif := find_year_in_exif(file):
+            print(f"Found year in exif: {year_from_exif}")
