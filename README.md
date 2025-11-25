@@ -8,23 +8,11 @@ cd `$HOME/projects/fotopapa-main`
 
 ### Create virtual environment
 
-    python -m venv venv
-
-### Activate it
-
-    source venv/bin/activate
-
-### Upgrade pip
-
-    pip install -q --upgrade pip
-
-### Install requirements
-
-    pip install -q -r requirements.txt
+    uv sync
 
 ### run the script
 
-    python main.py
+    uv run main.py
 
 ### Output
 
@@ -95,15 +83,16 @@ cd `$HOME/projects/fotopapa-main`
 
 ### Run tests
 
-    pytest
+    uv run -m pytest
 
 ### Output
     
-    ============================================================================ test session starts =============================================================================
-    platform darwin -- Python 3.12.1, pytest-8.0.2, pluggy-1.4.0
-    rootdir: /Users/tuvokki/projects/fotopapa-main
-    collected 7 items
+    ============================================================================================= test session starts =============================================================================================
+    platform darwin -- Python 3.13.1, pytest-9.0.1, pluggy-1.6.0
+    rootdir: /Users/tuvokki/projects/filesorter
+    configfile: pyproject.toml
+    collected 7 items                                                                                                                                                                                             
     
-    test_main.py .......                                                                                                                                                   [100%]
+    test_main.py .......                                                                                                                                                                                    [100%]
     
-    ============================================================================= 7 passed in 0.03s ==============================================================================
+    ============================================================================================== 7 passed in 0.06s ==============================================================================================
